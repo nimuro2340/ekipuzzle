@@ -46,7 +46,7 @@ def get_official_wiki_title(href, fallback_name):
             title = h1.get_text(strip=True) if h1 else fallback_name
             
         wiki_title_cache[url] = title
-        time.sleep(0.5) # サーバー負荷軽減
+        time.sleep(1.0) # サーバー負荷軽減
         return title
     except Exception as e:
         print(f"      [警告] リンク先のタイトル取得に失敗: {fallback_name} ({e})")
@@ -115,13 +115,13 @@ def get_official_wiki_title_api(href, fallback_name, station_name):
                 
                 # 成功したらキャッシュに保存して返す
                 wiki_title_cache[raw_title] = true_title
-                time.sleep(0.5)
+                time.sleep(1.0)
                 return true_title
             
         except Exception as e:
             # 1回目、2回目の失敗はリアルタイムでログに出し、3秒休んでからその場でやり直す
             print(f"      [リトライ {attempt+1}/{max_retries}] API通信エラー ({raw_title}): {e}")
-            time.sleep(8)
+            time.sleep(10)
             
     # 3回やってもダメだった場合
     print(f"      [エラー] リンク先のタイトル取得に最終失敗: {fallback_name}")
