@@ -358,7 +358,7 @@ def get_todays_sub_pages():
     # ★手動更新用に全ページ（sub_pages_all）を強制的に返すようにします
     # return sub_pages_all, weekday
 
-    # 本来の処理をする場合はこちらを解放
+    # 本来の曜日指定処理をする場合はこちらを有効化
     return chunks[weekday], weekday
 
 
