@@ -1,0 +1,93 @@
+name: Daily Station Extraction & Generating Answers
+
+on:
+  schedule:
+    # 日本時間(JST)の深夜3時は、協定世界時(UTC)の前日18時です
+    # 設定時刻より3～5時間遅れるので、更新時刻をJST22:07に設定（1次）
+    - cron: '7 13 * * *'
+    # 2次バックアップ（JST02:52）
+    - cron: "52 17 * * *"
+    # 3次バックアップ（JST 04:37）
+    - cron: "37 19 * * *"
+    # 4次バックアップ（JST 08:36）
+    - cron: "36 23 * * *"
+    # 5次バックアップ（JST 14:08）
+    - cron: "08 05 * * *"
+    # 6次バックアップ（JST 18:23）
+    - cron: "23 09 * * *"
+  # 手動でもボタンから実行できるようにする設定
+  workflow_dispatch: 
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    # このワークフローにリポジトリへの書き込み権限を付与する
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 【修正1】全ブランチのデータをダウンロードする（別ブランチへの同期に必須）
+
+      - name: Python環境のセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: stations.jsonの更新
+        working-directory: ./data
+        run: python extract_stations_2.py
+
+      # 駅データが完成した直後に、そのデータを使って答えを生成する
+      #- name: 駅ドル 答え生成
+      #  working-directory: ./ekidle
+      #  run: python generate_answers.py
+
+        # ③ekilocateフォルダに移動して駅ロケの答えを生成
+      #- name: 駅ロケ 答え生成
+      #  working-directory: ./ekilocate
+      #  run: python loca_generate_answers.py
+
+      - name: 取得したデータをコミットしてプッシュする
+        run: |
+          # 誰が更新したかを記録するためのGitの初期設定です
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 変更（追加や修正）があったファイルを自動で安全にすべて選択します
+          git add -A
+          
+          # 画面裏で本当にファイルに変更（差分）があるかチェックします
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "データの変更を検知したため、更新処理を行います。"
+            git commit -m "Auto-update stations & generated answers"
+            
+            # 最新の状態を反映させてから安全にプッシュします
+            git fetch origin main
+            git rebase origin/main || git rebase --abort
+            git push origin main
+          else
+            echo "変更されたデータはありませんでした。処理を正常終了します。"
+          fi
+
+      # 作成された最新データをdevelopmentにも同期する
+      #- name: データをdevelopmentへ同期する
+      #  run: |
+      #    git fetch origin development
+      #    git checkout development
+          
+          # 【修正2】mainブランチにある「最新の駅データ」と「答えのデータ」の2つを引っ張ってくる
+          # ※もし答えのファイル名が違う場合は「daily_answer.json」の部分を書き換えてください
+      #    git checkout main -- db/stations.json ekidle/answers/ ekidle/answers_admin/ ekilocate/answers ekilocate/answers_admin
+          
+          # developmentブランチへコミットしてプッシュする
+      #    git commit -m "Sync stations and answers from main" || echo "No changes to sync"
+      #    git push origin development
