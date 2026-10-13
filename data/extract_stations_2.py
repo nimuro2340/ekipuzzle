@@ -46,7 +46,7 @@ def get_official_wiki_title(href, fallback_name):
             title = h1.get_text(strip=True) if h1 else fallback_name
             
         wiki_title_cache[url] = title
-        time.sleep(1.0) # サーバー負荷軽減
+        time.sleep(0.5) # サーバー負荷軽減
         return title
     except Exception as e:
         print(f"      [警告] リンク先のタイトル取得に失敗: {fallback_name} ({e})")
@@ -83,6 +83,9 @@ def get_official_wiki_title_api(href, fallback_name, station_name):
     if raw_title in wiki_title_cache:
         return wiki_title_cache[raw_title]
     
+    # ★ 改善1: 連絡先を含めたちゃんとしたUser-Agentを名乗ることで、APIの制限枠が大幅に緩和されます
+    headers = {"User-Agent": "EkiDleBot/1.0 (contact: info@gmail.com)"}
+    
     api_url = "https://ja.wikipedia.org/w/api.php"
     params = {
         "action": "query",
@@ -91,46 +94,53 @@ def get_official_wiki_title_api(href, fallback_name, station_name):
         "format": "json"
     }
     
-    max_retries = 3 # 最大3回までやり直す
-    for attempt in range(max_retries):
-        try:
-            # APIへ通信
-            res = requests.get(api_url, params=params, headers={"User-Agent": "EkiDleBot/1.0"}, timeout=5)
-            res.raise_for_status()
-            data = res.json()
-            
-            # APIのレスポンスから、正規化された最終タイトルを取得
-            pages = data.get("query", {}).get("pages", {})
-            if pages:
-                # 辞書の最初のアイテムを取り出す
-                page_info = list(pages.values())[0]
+    try:
+        res = requests.get(api_url, params=params, headers=headers, timeout=5)
+        # 429等のエラーなら例外を発生させて即座に第2段階（HTML）へ逃げる
+        res.raise_for_status() 
+        data = res.json()
+        
+        pages = data.get("query", {}).get("pages", {})
+        if pages:
+            page_info = list(pages.values())[0]
+            if "missing" not in page_info:
                 true_title = page_info.get("title", fallback_name)
-                
-                # そもそもページが存在しない場合（リンク切れなど）
-                if "missing" in page_info:
-                    print(f"      [警告] ページが存在しません: {raw_title}")
-                    wiki_title_cache[raw_title] = fallback_name
-                    failed_wiki_links.append(f"{station_name} : {fallback_name} (リンク切れ)")
-                    return fallback_name
-                
-                # 成功したらキャッシュに保存して返す
                 wiki_title_cache[raw_title] = true_title
-                time.sleep(1.0)
+                time.sleep(0.1)
                 return true_title
-            
-        except Exception as e:
-            # 1回目、2回目の失敗はリアルタイムでログに出し、3秒休んでからその場でやり直す
-            print(f"      [リトライ {attempt+1}/{max_retries}] API通信エラー ({raw_title}): {e}")
-            time.sleep(10)
-            
-    # 3回やってもダメだった場合
-    print(f"      [エラー] リンク先のタイトル取得に最終失敗: {fallback_name}")
-    wiki_title_cache[raw_title] = fallback_name
+                
+    except Exception as e:
+        # APIが失敗（429など）した場合は、エラーログを出して直ちにHTML方式へ移行
+        print(f"      [API拒否] {raw_title} ({e}) ➔ HTML方式に切り替えます")
+
+    # --- 第2段階：制限の緩いHTML通信で確実に取得（リカバリー） ---
+    # APIが弾かれた直後なので、サーバーを刺激しないよう少し待つ
+    time.sleep(3.0) 
+    url = urllib.parse.urljoin("https://ja.wikipedia.org", href)
     
-    # レポートで確認できるようにリストへ追加
-    failed_wiki_links.append(f"{station_name} : {fallback_name}")
-    
-    return fallback_name
+    try:
+        res_html = requests.get(url, headers=headers, timeout=10)
+        res_html.raise_for_status()
+        soup = BeautifulSoup(res_html.text, "html.parser")
+        
+        h1_span = soup.find('span', class_='mw-page-title-main')
+        if h1_span:
+            title = h1_span.get_text(strip=True)
+        else:
+            h1 = soup.find('h1', id='firstHeading')
+            title = h1.get_text(strip=True) if h1 else fallback_name
+            
+        wiki_title_cache[raw_title] = title
+        print(f"      [リカバリー成功] HTML通信で {title} を取得しました。")
+        time.sleep(2.0) # HTML取得後はしっかり休ませる
+        return title
+        
+    except Exception as e:
+        # HTMLすら拒否された場合の最終手段
+        print(f"      [完全失敗] HTMLでの取得にも失敗: {fallback_name} ({e})")
+        wiki_title_cache[raw_title] = fallback_name
+        failed_wiki_links.append(f"{station_name} : {fallback_name}")   # レポートリストに追加
+        return fallback_name
 
 
 # =========================================================================
@@ -341,7 +351,7 @@ def get_todays_sub_pages():
     weekday = datetime.datetime.today().weekday()
 
     # ★動作テストのため、強制的に「6:日曜日」に設定します
-    weekday = 0
+    # weekday = 6
 
     # 取得した全ページを曜日ごとに自動で7等分する
     chunks = [[] for _ in range(7)]
@@ -356,10 +366,9 @@ def get_todays_sub_pages():
     # return ["む-も", "や-わ行"], weekday
 
     # ★手動更新用に全ページ（sub_pages_all）を強制的に返すようにします
-    # return sub_pages_all, weekday
+    return sub_pages_all, weekday
 
-    # 本来の曜日指定処理をする場合はこちらを有効化
-    return chunks[weekday], weekday
+    # return chunks[weekday], weekday
 
 
 # =========================================
@@ -973,19 +982,17 @@ def extract_and_count_stations():
                 # ★特定の駅だけを取得したい場合は、全曜日指定にした上で、このリストの中に駅名を書きます。
                 # 例: TARGET_STATIONS = ["ガーラ湯沢駅", "高輪ゲートウェイ駅"]
                 # 空っぽ [] の場合は、通常通りページ内の全駅を取得します。
-                TARGET_STATIONS = [
-                    #"青柳町停留場", "石山通停留場", "行啓通停留場", "競馬場前停留場", "幌南小学校前停留場",
-                    #"魚市場通停留場", "大町停留場 (北海道)", "柏木町停留場", "駒場車庫前停留場", "五稜郭公園前停留場",
-                    #"資生館小学校前停留場", "市役所前停留場 (北海道)", "十字街停留場", "昭和橋停留場", 
-                    #"新川町停留場", "末広町停留場 (北海道)", "杉並町停留場", "静修学園前停留場", "狸小路停留場", 
-                    #"千歳町停留場 (北海道)", "中央区役所前停留場", "中央図書館前停留場", "中央病院前停留場",
-                    #"千代台停留場", "電車事業所前停留場", "中島公園通停留場", "西15丁目停留場", "西線9条旭山公園通停留場",
-                    #"西線11条停留場", "西線14条停留場", "西線16条停留場", "西8丁目停留場", "西4丁目停留場", 
-                    #"函館アリーナ前停留場", "函館どつく前停留場", "東屯田通停留場", "東本願寺前停留場", "深堀町停留場",
-                    #"宝来町停留場", "堀川町停留場", "松風町停留場", "谷地頭停留場", "山鼻9条停留場", 
-                    #"山鼻19条停留場", "湯の川停留場", "湯の川温泉停留場", "ロープウェイ入口停留場",
-                    #"大沢内駅", 
-                ]
+                TARGET_STATIONS = ["青柳町停留場", "石山通停留場", "行啓通停留場", "競馬場前停留場", "幌南小学校前停留場",
+                                   "魚市場通停留場", "大町停留場 (北海道)", "柏木町停留場", "駒場車庫前停留場", "五稜郭公園前停留場",
+                                   "資生館小学校前停留場", "市役所前停留場 (北海道)", "十字街停留場", "昭和橋停留場", 
+                                   "新川町停留場", "末広町停留場 (北海道)", "杉並町停留場", "静修学園前停留場", "狸小路停留場", 
+                                   "千歳町停留場 (北海道)", "中央区役所前停留場", "中央図書館前停留場", "中央病院前停留場",
+                                   "千代台停留場", "電車事業所前停留場", "中島公園通停留場", "西15丁目停留場", "西線9条旭山公園通停留場",
+                                   "西線11条停留場", "西線14条停留場", "西線16条停留場", "西8丁目停留場", "西4丁目停留場", 
+                                   "函館アリーナ前停留場", "函館どつく前停留場", "東屯田通停留場", "東本願寺前停留場", "深堀町停留場",
+                                   "宝来町停留場", "堀川町停留場", "松風町停留場", "谷地頭停留場", "山鼻9条停留場", 
+                                   "山鼻19条停留場", "湯の川停留場", "湯の川温泉停留場", "ロープウェイ入口停留場",
+                                   "大沢内駅", ]
                 
                 if TARGET_STATIONS and (display_name not in TARGET_STATIONS):
                     # ターゲット外でも「リストには存在していた」という証拠だけは残す
