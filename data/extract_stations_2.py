@@ -356,9 +356,10 @@ def get_todays_sub_pages():
     # return ["む-も", "や-わ行"], weekday
 
     # ★手動更新用に全ページ（sub_pages_all）を強制的に返すようにします
-    return sub_pages_all, weekday
+    # return sub_pages_all, weekday
 
-    # return chunks[weekday], weekday
+    # 本来の処理をする場合はこちらを解放
+    return chunks[weekday], weekday
 
 
 # =========================================
