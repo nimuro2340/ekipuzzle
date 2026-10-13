@@ -366,7 +366,8 @@ def get_todays_sub_pages():
     # return ["む-も", "や-わ行"], weekday
 
     # ★手動更新用に全ページ（sub_pages_all）を強制的に返すようにします
-    # return sub_pages_all, weekday
+    # 本来の挙動に戻すときは、これをコメントアウトして下のreturn chunks[weekday], weekdayを有効化
+    #return sub_pages_all, weekday
 
     return chunks[weekday], weekday
 
@@ -816,16 +817,35 @@ def fetch_station_details(url, station_name):
                 # ⑥ 所属事業者
                 elif '所属事業者' in header or '事業者' in header:
                     found_companies = False
-                    for a in td.find_all('a'):
-                        href = a.get('href')
-                        raw_name = a.get('title')
-                        # ページ内リンク（#）や画像、注釈リンクを弾き、本物のWikiリンクだけを処理
-                        if href and '/wiki/' in href and raw_name:
-                            found_companies = True
-                            # API関数を渡して正式な会社名を取得
-                            official_name = get_official_wiki_title_api(href, raw_name, station_name)
-                            if official_name not in data["companies"]:
-                                data["companies"].append(official_name)
+                    paren_depth = 0
+                    # td要素内のすべての要素とテキストを上から順番に走査
+                    for node in td.descendants:
+                        # テキストデータ（文字）の場合、カッコの開閉状態をカウント
+                        if getattr(node, 'name', None) is None:
+                            text_str = str(node)
+                            paren_depth += text_str.count('（') + text_str.count('(')
+                            paren_depth -= text_str.count('）') + text_str.count(')')
+                            paren_depth = max(0, paren_depth)
+
+                        # aタグ（リンク）の場合
+                        elif getattr(node, 'name', None) == 'a':
+                            # ★カッコに囲まれた階層（ブランド名や愛称など）にいる場合はスキップ
+                            if paren_depth > 0:
+                                continue
+
+                            href = node.get('href')
+                            raw_name = node.get('title')
+                            
+                            if href and '/wiki/' in href and raw_name:
+                                found_companies = True
+                                # API関数を渡して正式な会社名を取得
+                                official_name = get_official_wiki_title_api(href, raw_name, station_name)
+
+                                # ★ 末尾の曖昧さ回避（例: " (企業)" や " (鉄道)"）を全自動で削除
+                                official_name = re.sub(r'\s\(.*?\)$', '', official_name)
+
+                                if official_name not in data["companies"]:
+                                    data["companies"].append(official_name)
                                 
                     # リンクが一つも貼られていなかった駅のための安全装置（従来のテキスト分割）
                     if not found_companies:
@@ -868,7 +888,7 @@ def fetch_station_details(url, station_name):
                                 if official_name not in data["lines"]:
                                     data["lines"].append(official_name)
 
-                    # ▼ 追加: リンクが1つも存在しなかった場合（札幌市電山鼻西線など）の安全な抽出処理
+                    #  リンクが1つも存在しなかった場合（札幌市電山鼻西線など）の安全な抽出処理
                     if not found_lines:
                         # 1. <sup>タグ（[1]などの注釈）をHTMLから直接削除する
                         td_copy = copy.copy(td)
@@ -877,11 +897,15 @@ def fetch_station_details(url, station_name):
                         
                         # 2. 改行（<br>など）を区切り文字としてテキストを取得
                         # これにより「・」や「（）」は路線名の一部としてそのまま残る
-                        fallback_text = td_copy.get_text(separator="\n", strip=True)
+                        for br in td_copy.find_all('br'):
+                            br.replace_with('\n')
+
+                        # ★ separator 指定を外し、タグの境界での勝手な分割を防ぐ
+                        fallback_text = td_copy.get_text(strip=True)
                         
                         # 3. 改行ごとに分割してリストに追加
                         for line_text in fallback_text.split('\n'):
-                            # ★ 空白(全半角)、■◆●などの箇条書き記号、[1]などのテキスト注釈を一網打尽にする
+                            # 空白(全半角)、■◆●などの箇条書き記号、[1]などのテキスト注釈を一網打尽にする
                             clean_line = re.sub(r'[\s\*■◆●○◇]|\[[^\]]*\]', '', line_text).strip()
                             # 抽出した路線名を登録
                             if clean_line and clean_line not in data["lines"]:
@@ -982,18 +1006,19 @@ def extract_and_count_stations():
                 # ★特定の駅だけを取得したい場合は、全曜日指定にした上で、このリストの中に駅名を書きます。
                 # 例: TARGET_STATIONS = ["ガーラ湯沢駅", "高輪ゲートウェイ駅"]
                 # 空っぽ [] の場合は、通常通りページ内の全駅を取得します。
-                TARGET_STATIONS = [#"青柳町停留場", "石山通停留場", "行啓通停留場", "競馬場前停留場", "幌南小学校前停留場",
-                                   #"魚市場通停留場", "大町停留場 (北海道)", "柏木町停留場", "駒場車庫前停留場", "五稜郭公園前停留場",
-                                   #"資生館小学校前停留場", "市役所前停留場 (北海道)", "十字街停留場", "昭和橋停留場", 
-                                   #"新川町停留場", "末広町停留場 (北海道)", "杉並町停留場", "静修学園前停留場", "狸小路停留場", 
-                                   #"千歳町停留場 (北海道)", "中央区役所前停留場", "中央図書館前停留場", "中央病院前停留場",
-                                   #"千代台停留場", "電車事業所前停留場", "中島公園通停留場", "西15丁目停留場", "西線9条旭山公園通停留場",
-                                   #"西線11条停留場", "西線14条停留場", "西線16条停留場", "西8丁目停留場", "西4丁目停留場", 
-                                   #"函館アリーナ前停留場", "函館どつく前停留場", "東屯田通停留場", "東本願寺前停留場", "深堀町停留場",
-                                   #"宝来町停留場", "堀川町停留場", "松風町停留場", "谷地頭停留場", "山鼻9条停留場", 
-                                   #"山鼻19条停留場", "湯の川停留場", "湯の川温泉停留場", "ロープウェイ入口停留場",
-                                   #"大沢内駅", 
-                ]
+                TARGET_STATIONS = [
+                    #"青柳町停留場", "石山通停留場", "行啓通停留場", "競馬場前停留場", "幌南小学校前停留場",
+                    #"魚市場通停留場", "大町停留場 (北海道)", "柏木町停留場", "駒場車庫前停留場", "五稜郭公園前停留場",
+                    #"資生館小学校前停留場", "市役所前停留場 (北海道)", "十字街停留場", "昭和橋停留場", 
+                    #"新川町停留場", "末広町停留場 (北海道)", "杉並町停留場", "静修学園前停留場", "狸小路停留場", 
+                    #"千歳町停留場 (北海道)", "中央区役所前停留場", "中央図書館前停留場", "中央病院前停留場",
+                    #"千代台停留場", "電車事業所前停留場", "中島公園通停留場", "西15丁目停留場", "西線9条旭山公園通停留場",
+                    #"西線11条停留場", "西線14条停留場", "西線16条停留場", "西8丁目停留場", "西4丁目停留場",                                    
+                    #"函館アリーナ前停留場", "函館どつく前停留場", "東屯田通停留場", "東本願寺前停留場", "深堀町停留場",
+                    #"宝来町停留場", "堀川町停留場", "松風町停留場", "谷地頭停留場", "山鼻9条停留場", 
+                    #"山鼻19条停留場", "湯の川停留場", "湯の川温泉停留場", "ロープウェイ入口停留場",
+                    #"大沢内駅", 
+                    ]
                 
                 if TARGET_STATIONS and (display_name not in TARGET_STATIONS):
                     # ターゲット外でも「リストには存在していた」という証拠だけは残す
@@ -1380,6 +1405,7 @@ def extract_and_count_stations():
             if not s.get("latitude") or not s.get("longitude"): missing.append("座標")
             if not s.get("pref"): missing.append("都道府県")
             if not s.get("municipality"): missing.append("市区町村")
+            if not s.get("population"): missing.append("人口(統計データ)")
             
             if missing:
                 missing_data_alerts.append(f"  - {s['kanji']} : {', '.join(missing)} がありません")
