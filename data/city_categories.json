@@ -1,0 +1,618 @@
+{
+  "政令指定都市": [
+    {
+      "name": "札幌市",
+      "url": "https://ja.wikipedia.org/wiki/札幌市"
+    },
+    {
+      "name": "仙台市",
+      "url": "https://ja.wikipedia.org/wiki/仙台市"
+    },
+    {
+      "name": "さいたま市",
+      "url": "https://ja.wikipedia.org/wiki/さいたま市"
+    },
+    {
+      "name": "千葉市",
+      "url": "https://ja.wikipedia.org/wiki/千葉市"
+    },
+    {
+      "name": "横浜市",
+      "url": "https://ja.wikipedia.org/wiki/横浜市"
+    },
+    {
+      "name": "川崎市",
+      "url": "https://ja.wikipedia.org/wiki/川崎市"
+    },
+    {
+      "name": "相模原市",
+      "url": "https://ja.wikipedia.org/wiki/相模原市"
+    },
+    {
+      "name": "新潟市",
+      "url": "https://ja.wikipedia.org/wiki/新潟市"
+    },
+    {
+      "name": "静岡市",
+      "url": "https://ja.wikipedia.org/wiki/静岡市"
+    },
+    {
+      "name": "浜松市",
+      "url": "https://ja.wikipedia.org/wiki/浜松市"
+    },
+    {
+      "name": "名古屋市",
+      "url": "https://ja.wikipedia.org/wiki/名古屋市"
+    },
+    {
+      "name": "京都市",
+      "url": "https://ja.wikipedia.org/wiki/京都市"
+    },
+    {
+      "name": "大阪市",
+      "url": "https://ja.wikipedia.org/wiki/大阪市"
+    },
+    {
+      "name": "堺市",
+      "url": "https://ja.wikipedia.org/wiki/堺市"
+    },
+    {
+      "name": "神戸市",
+      "url": "https://ja.wikipedia.org/wiki/神戸市"
+    },
+    {
+      "name": "岡山市",
+      "url": "https://ja.wikipedia.org/wiki/岡山市"
+    },
+    {
+      "name": "広島市",
+      "url": "https://ja.wikipedia.org/wiki/広島市"
+    },
+    {
+      "name": "北九州市",
+      "url": "https://ja.wikipedia.org/wiki/北九州市"
+    },
+    {
+      "name": "福岡市",
+      "url": "https://ja.wikipedia.org/wiki/福岡市"
+    },
+    {
+      "name": "熊本市",
+      "url": "https://ja.wikipedia.org/wiki/熊本市"
+    }
+  ],
+  "中核市": [
+    {
+      "name": "旭川市",
+      "url": "https://ja.wikipedia.org/wiki/旭川市"
+    },
+    {
+      "name": "函館市",
+      "url": "https://ja.wikipedia.org/wiki/函館市"
+    },
+    {
+      "name": "青森市",
+      "url": "https://ja.wikipedia.org/wiki/青森市"
+    },
+    {
+      "name": "八戸市",
+      "url": "https://ja.wikipedia.org/wiki/八戸市"
+    },
+    {
+      "name": "盛岡市",
+      "url": "https://ja.wikipedia.org/wiki/盛岡市"
+    },
+    {
+      "name": "秋田市",
+      "url": "https://ja.wikipedia.org/wiki/秋田市"
+    },
+    {
+      "name": "山形市",
+      "url": "https://ja.wikipedia.org/wiki/山形市"
+    },
+    {
+      "name": "郡山市",
+      "url": "https://ja.wikipedia.org/wiki/郡山市"
+    },
+    {
+      "name": "いわき市",
+      "url": "https://ja.wikipedia.org/wiki/いわき市"
+    },
+    {
+      "name": "福島市",
+      "url": "https://ja.wikipedia.org/wiki/福島市"
+    },
+    {
+      "name": "水戸市",
+      "url": "https://ja.wikipedia.org/wiki/水戸市"
+    },
+    {
+      "name": "宇都宮市",
+      "url": "https://ja.wikipedia.org/wiki/宇都宮市"
+    },
+    {
+      "name": "前橋市",
+      "url": "https://ja.wikipedia.org/wiki/前橋市"
+    },
+    {
+      "name": "高崎市",
+      "url": "https://ja.wikipedia.org/wiki/高崎市"
+    },
+    {
+      "name": "川越市",
+      "url": "https://ja.wikipedia.org/wiki/川越市"
+    },
+    {
+      "name": "越谷市",
+      "url": "https://ja.wikipedia.org/wiki/越谷市"
+    },
+    {
+      "name": "川口市",
+      "url": "https://ja.wikipedia.org/wiki/川口市"
+    },
+    {
+      "name": "船橋市",
+      "url": "https://ja.wikipedia.org/wiki/船橋市"
+    },
+    {
+      "name": "柏市",
+      "url": "https://ja.wikipedia.org/wiki/柏市"
+    },
+    {
+      "name": "八王子市",
+      "url": "https://ja.wikipedia.org/wiki/八王子市"
+    },
+    {
+      "name": "横須賀市",
+      "url": "https://ja.wikipedia.org/wiki/横須賀市"
+    },
+    {
+      "name": "富山市",
+      "url": "https://ja.wikipedia.org/wiki/富山市"
+    },
+    {
+      "name": "金沢市",
+      "url": "https://ja.wikipedia.org/wiki/金沢市"
+    },
+    {
+      "name": "福井市",
+      "url": "https://ja.wikipedia.org/wiki/福井市"
+    },
+    {
+      "name": "甲府市",
+      "url": "https://ja.wikipedia.org/wiki/甲府市"
+    },
+    {
+      "name": "長野市",
+      "url": "https://ja.wikipedia.org/wiki/長野市"
+    },
+    {
+      "name": "松本市",
+      "url": "https://ja.wikipedia.org/wiki/松本市"
+    },
+    {
+      "name": "岐阜市",
+      "url": "https://ja.wikipedia.org/wiki/岐阜市"
+    },
+    {
+      "name": "豊田市",
+      "url": "https://ja.wikipedia.org/wiki/豊田市"
+    },
+    {
+      "name": "豊橋市",
+      "url": "https://ja.wikipedia.org/wiki/豊橋市"
+    },
+    {
+      "name": "岡崎市",
+      "url": "https://ja.wikipedia.org/wiki/岡崎市"
+    },
+    {
+      "name": "一宮市",
+      "url": "https://ja.wikipedia.org/wiki/一宮市"
+    },
+    {
+      "name": "大津市",
+      "url": "https://ja.wikipedia.org/wiki/大津市"
+    },
+    {
+      "name": "高槻市",
+      "url": "https://ja.wikipedia.org/wiki/高槻市"
+    },
+    {
+      "name": "東大阪市",
+      "url": "https://ja.wikipedia.org/wiki/東大阪市"
+    },
+    {
+      "name": "豊中市",
+      "url": "https://ja.wikipedia.org/wiki/豊中市"
+    },
+    {
+      "name": "枚方市",
+      "url": "https://ja.wikipedia.org/wiki/枚方市"
+    },
+    {
+      "name": "八尾市",
+      "url": "https://ja.wikipedia.org/wiki/八尾市"
+    },
+    {
+      "name": "寝屋川市",
+      "url": "https://ja.wikipedia.org/wiki/寝屋川市"
+    },
+    {
+      "name": "吹田市",
+      "url": "https://ja.wikipedia.org/wiki/吹田市"
+    },
+    {
+      "name": "姫路市",
+      "url": "https://ja.wikipedia.org/wiki/姫路市"
+    },
+    {
+      "name": "西宮市",
+      "url": "https://ja.wikipedia.org/wiki/西宮市"
+    },
+    {
+      "name": "尼崎市",
+      "url": "https://ja.wikipedia.org/wiki/尼崎市"
+    },
+    {
+      "name": "明石市",
+      "url": "https://ja.wikipedia.org/wiki/明石市"
+    },
+    {
+      "name": "奈良市",
+      "url": "https://ja.wikipedia.org/wiki/奈良市"
+    },
+    {
+      "name": "和歌山市",
+      "url": "https://ja.wikipedia.org/wiki/和歌山市"
+    },
+    {
+      "name": "鳥取市",
+      "url": "https://ja.wikipedia.org/wiki/鳥取市"
+    },
+    {
+      "name": "松江市",
+      "url": "https://ja.wikipedia.org/wiki/松江市"
+    },
+    {
+      "name": "倉敷市",
+      "url": "https://ja.wikipedia.org/wiki/倉敷市"
+    },
+    {
+      "name": "福山市",
+      "url": "https://ja.wikipedia.org/wiki/福山市"
+    },
+    {
+      "name": "呉市",
+      "url": "https://ja.wikipedia.org/wiki/呉市"
+    },
+    {
+      "name": "下関市",
+      "url": "https://ja.wikipedia.org/wiki/下関市"
+    },
+    {
+      "name": "高松市",
+      "url": "https://ja.wikipedia.org/wiki/高松市"
+    },
+    {
+      "name": "松山市",
+      "url": "https://ja.wikipedia.org/wiki/松山市"
+    },
+    {
+      "name": "高知市",
+      "url": "https://ja.wikipedia.org/wiki/高知市"
+    },
+    {
+      "name": "久留米市",
+      "url": "https://ja.wikipedia.org/wiki/久留米市"
+    },
+    {
+      "name": "長崎市",
+      "url": "https://ja.wikipedia.org/wiki/長崎市"
+    },
+    {
+      "name": "佐世保市",
+      "url": "https://ja.wikipedia.org/wiki/佐世保市"
+    },
+    {
+      "name": "大分市",
+      "url": "https://ja.wikipedia.org/wiki/大分市"
+    },
+    {
+      "name": "宮崎市",
+      "url": "https://ja.wikipedia.org/wiki/宮崎市"
+    },
+    {
+      "name": "鹿児島市",
+      "url": "https://ja.wikipedia.org/wiki/鹿児島市"
+    },
+    {
+      "name": "那覇市",
+      "url": "https://ja.wikipedia.org/wiki/那覇市"
+    }
+  ],
+  "施行時特例市": [
+    {
+      "name": "つくば市",
+      "url": "https://ja.wikipedia.org/wiki/つくば市"
+    },
+    {
+      "name": "伊勢崎市",
+      "url": "https://ja.wikipedia.org/wiki/伊勢崎市"
+    },
+    {
+      "name": "太田市",
+      "url": "https://ja.wikipedia.org/wiki/太田市"
+    },
+    {
+      "name": "所沢市",
+      "url": "https://ja.wikipedia.org/wiki/所沢市"
+    },
+    {
+      "name": "草加市",
+      "url": "https://ja.wikipedia.org/wiki/草加市"
+    },
+    {
+      "name": "春日部市",
+      "url": "https://ja.wikipedia.org/wiki/春日部市"
+    },
+    {
+      "name": "熊谷市",
+      "url": "https://ja.wikipedia.org/wiki/熊谷市"
+    },
+    {
+      "name": "小田原市",
+      "url": "https://ja.wikipedia.org/wiki/小田原市"
+    },
+    {
+      "name": "大和市",
+      "url": "https://ja.wikipedia.org/wiki/大和市"
+    },
+    {
+      "name": "平塚市",
+      "url": "https://ja.wikipedia.org/wiki/平塚市"
+    },
+    {
+      "name": "厚木市",
+      "url": "https://ja.wikipedia.org/wiki/厚木市"
+    },
+    {
+      "name": "茅ヶ崎市",
+      "url": "https://ja.wikipedia.org/wiki/茅ヶ崎市"
+    },
+    {
+      "name": "長岡市",
+      "url": "https://ja.wikipedia.org/wiki/長岡市"
+    },
+    {
+      "name": "上越市",
+      "url": "https://ja.wikipedia.org/wiki/上越市"
+    },
+    {
+      "name": "沼津市",
+      "url": "https://ja.wikipedia.org/wiki/沼津市"
+    },
+    {
+      "name": "富士市",
+      "url": "https://ja.wikipedia.org/wiki/富士市"
+    },
+    {
+      "name": "春日井市",
+      "url": "https://ja.wikipedia.org/wiki/春日井市"
+    },
+    {
+      "name": "四日市市",
+      "url": "https://ja.wikipedia.org/wiki/四日市市"
+    },
+    {
+      "name": "茨木市",
+      "url": "https://ja.wikipedia.org/wiki/茨木市"
+    },
+    {
+      "name": "岸和田市",
+      "url": "https://ja.wikipedia.org/wiki/岸和田市"
+    },
+    {
+      "name": "加古川市",
+      "url": "https://ja.wikipedia.org/wiki/加古川市"
+    },
+    {
+      "name": "宝塚市",
+      "url": "https://ja.wikipedia.org/wiki/宝塚市"
+    },
+    {
+      "name": "佐賀市",
+      "url": "https://ja.wikipedia.org/wiki/佐賀市"
+    }
+  ],
+  "都道府県庁所在地": [
+    {
+      "name": "札幌市",
+      "url": "https://ja.wikipedia.org/wiki/札幌市"
+    },
+    {
+      "name": "青森市",
+      "url": "https://ja.wikipedia.org/wiki/青森市"
+    },
+    {
+      "name": "盛岡市",
+      "url": "https://ja.wikipedia.org/wiki/盛岡市"
+    },
+    {
+      "name": "仙台市",
+      "url": "https://ja.wikipedia.org/wiki/仙台市"
+    },
+    {
+      "name": "秋田市",
+      "url": "https://ja.wikipedia.org/wiki/秋田市"
+    },
+    {
+      "name": "山形市",
+      "url": "https://ja.wikipedia.org/wiki/山形市"
+    },
+    {
+      "name": "福島市",
+      "url": "https://ja.wikipedia.org/wiki/福島市"
+    },
+    {
+      "name": "水戸市",
+      "url": "https://ja.wikipedia.org/wiki/水戸市"
+    },
+    {
+      "name": "宇都宮市",
+      "url": "https://ja.wikipedia.org/wiki/宇都宮市"
+    },
+    {
+      "name": "前橋市",
+      "url": "https://ja.wikipedia.org/wiki/前橋市"
+    },
+    {
+      "name": "さいたま市",
+      "url": "https://ja.wikipedia.org/wiki/さいたま市"
+    },
+    {
+      "name": "千葉市",
+      "url": "https://ja.wikipedia.org/wiki/千葉市"
+    },
+    {
+      "name": "新宿区",
+      "url": "https://ja.wikipedia.org/wiki/新宿区"
+    },
+    {
+      "name": "横浜市",
+      "url": "https://ja.wikipedia.org/wiki/横浜市"
+    },
+    {
+      "name": "新潟市",
+      "url": "https://ja.wikipedia.org/wiki/新潟市"
+    },
+    {
+      "name": "富山市",
+      "url": "https://ja.wikipedia.org/wiki/富山市"
+    },
+    {
+      "name": "金沢市",
+      "url": "https://ja.wikipedia.org/wiki/金沢市"
+    },
+    {
+      "name": "福井市",
+      "url": "https://ja.wikipedia.org/wiki/福井市"
+    },
+    {
+      "name": "甲府市",
+      "url": "https://ja.wikipedia.org/wiki/甲府市"
+    },
+    {
+      "name": "長野市",
+      "url": "https://ja.wikipedia.org/wiki/長野市"
+    },
+    {
+      "name": "岐阜市",
+      "url": "https://ja.wikipedia.org/wiki/岐阜市"
+    },
+    {
+      "name": "静岡市",
+      "url": "https://ja.wikipedia.org/wiki/静岡市"
+    },
+    {
+      "name": "名古屋市",
+      "url": "https://ja.wikipedia.org/wiki/名古屋市"
+    },
+    {
+      "name": "津市",
+      "url": "https://ja.wikipedia.org/wiki/津市"
+    },
+    {
+      "name": "大津市",
+      "url": "https://ja.wikipedia.org/wiki/大津市"
+    },
+    {
+      "name": "京都市",
+      "url": "https://ja.wikipedia.org/wiki/京都市"
+    },
+    {
+      "name": "大阪市",
+      "url": "https://ja.wikipedia.org/wiki/大阪市"
+    },
+    {
+      "name": "神戸市",
+      "url": "https://ja.wikipedia.org/wiki/神戸市"
+    },
+    {
+      "name": "奈良市",
+      "url": "https://ja.wikipedia.org/wiki/奈良市"
+    },
+    {
+      "name": "和歌山市",
+      "url": "https://ja.wikipedia.org/wiki/和歌山市"
+    },
+    {
+      "name": "鳥取市",
+      "url": "https://ja.wikipedia.org/wiki/鳥取市"
+    },
+    {
+      "name": "松江市",
+      "url": "https://ja.wikipedia.org/wiki/松江市"
+    },
+    {
+      "name": "岡山市",
+      "url": "https://ja.wikipedia.org/wiki/岡山市"
+    },
+    {
+      "name": "広島市",
+      "url": "https://ja.wikipedia.org/wiki/広島市"
+    },
+    {
+      "name": "山口市",
+      "url": "https://ja.wikipedia.org/wiki/山口市"
+    },
+    {
+      "name": "徳島市",
+      "url": "https://ja.wikipedia.org/wiki/徳島市"
+    },
+    {
+      "name": "高松市",
+      "url": "https://ja.wikipedia.org/wiki/高松市"
+    },
+    {
+      "name": "松山市",
+      "url": "https://ja.wikipedia.org/wiki/松山市"
+    },
+    {
+      "name": "高知市",
+      "url": "https://ja.wikipedia.org/wiki/高知市"
+    },
+    {
+      "name": "福岡市",
+      "url": "https://ja.wikipedia.org/wiki/福岡市"
+    },
+    {
+      "name": "佐賀市",
+      "url": "https://ja.wikipedia.org/wiki/佐賀市"
+    },
+    {
+      "name": "長崎市",
+      "url": "https://ja.wikipedia.org/wiki/長崎市"
+    },
+    {
+      "name": "熊本市",
+      "url": "https://ja.wikipedia.org/wiki/熊本市"
+    },
+    {
+      "name": "大分市",
+      "url": "https://ja.wikipedia.org/wiki/大分市"
+    },
+    {
+      "name": "宮崎市",
+      "url": "https://ja.wikipedia.org/wiki/宮崎市"
+    },
+    {
+      "name": "鹿児島市",
+      "url": "https://ja.wikipedia.org/wiki/鹿児島市"
+    },
+    {
+      "name": "那覇市",
+      "url": "https://ja.wikipedia.org/wiki/那覇市"
+    }
+  ]
+}
