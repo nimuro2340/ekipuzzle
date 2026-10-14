@@ -858,24 +858,12 @@ def fetch_station_details(url, station_name):
                 # ⑦ 所属路線
                 elif '所属路線' in header or header == '路線':
                     found_lines = False
-                    paren_depth = 0
 
                     # td要素内のすべての要素とテキストを上から順番に走査
                     for node in td.descendants:
 
-                        # テキストデータ（文字）の場合、カッコの開閉状態をカウント
-                        if getattr(node, 'name', None) is None:
-                            text_str = str(node)
-                            paren_depth += text_str.count('（') + text_str.count('(')
-                            paren_depth -= text_str.count('）') + text_str.count(')')
-                            paren_depth = max(0, paren_depth) # マイナスにならないようガード
-
-                        # aタグの場合
-                        elif getattr(node, 'name', None) == 'a':
-                            # 現在カッコに囲まれた階層（直通路線や列車線の補足など）にいる場合はスキップ
-                            if paren_depth > 0:
-                                continue
-
+                       # aタグの場合
+                        if getattr(node, 'name', None) == 'a':
                             # title属性（Wikipediaの正式な記事名）を取得
                             href = node.get('href')
                             raw_name = node.get('title')
@@ -884,6 +872,8 @@ def fetch_station_details(url, station_name):
                                 found_lines = True  # リンクがあったフラグ
                                 # リダイレクトを解決して正式な路線名を取得
                                 official_name = get_official_wiki_title_api(href, raw_name, station_name)
+                                # 末尾の曖昧さ回避カッコ（例: " (鉄道)"）を全自動で削除
+                                official_name = re.sub(r'\s\(.*?\)$', '', official_name)
                                 # 最終的にきれいになった路線名をリストに追加
                                 if official_name not in data["lines"]:
                                     data["lines"].append(official_name)
@@ -901,7 +891,7 @@ def fetch_station_details(url, station_name):
                             br.replace_with('\n')
 
                         # ★ separator 指定を外し、タグの境界での勝手な分割を防ぐ
-                        fallback_text = td_copy.get_text(strip=True)
+                        fallback_text = td_copy.get_text()
                         
                         # 3. 改行ごとに分割してリストに追加
                         for line_text in fallback_text.split('\n'):
