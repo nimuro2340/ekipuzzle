@@ -858,12 +858,25 @@ def fetch_station_details(url, station_name):
                 # ⑦ 所属路線
                 elif '所属路線' in header or header == '路線':
                     found_lines = False
+                    paren_depth = 0
 
                     # td要素内のすべての要素とテキストを上から順番に走査
                     for node in td.descendants:
 
+                        # テキストデータ（文字）の場合、カッコの開閉状態をカウント
+                        if getattr(node, 'name', None) is None:
+                            text_str = str(node)
+                            paren_depth += text_str.count('（') + text_str.count('(')
+                            paren_depth -= text_str.count('）') + text_str.count(')')
+                            paren_depth = max(0, paren_depth)
+
                        # aタグの場合
                         if getattr(node, 'name', None) == 'a':
+
+                            # カッコ内の愛称・直通・貨物通称などは一切無視する
+                            if paren_depth > 0:
+                                continue
+
                             # title属性（Wikipediaの正式な記事名）を取得
                             href = node.get('href')
                             raw_name = node.get('title')
@@ -879,27 +892,28 @@ def fetch_station_details(url, station_name):
                                     data["lines"].append(official_name)
 
                     #  リンクが1つも存在しなかった場合（札幌市電山鼻西線など）の安全な抽出処理
-                    if not found_lines:
+                    # バグの原因になるため、当分廃止。路線名が全くないものについては手動で追加する。
+                    # if not found_lines:
                         # 1. <sup>タグ（[1]などの注釈）をHTMLから直接削除する
-                        td_copy = copy.copy(td)
-                        for sup in td_copy.find_all('sup'):
-                            sup.decompose()
+                    #     td_copy = copy.copy(td)
+                    #    for sup in td_copy.find_all('sup'):
+                    #        sup.decompose()
                         
                         # 2. 改行（<br>など）を区切り文字としてテキストを取得
                         # これにより「・」や「（）」は路線名の一部としてそのまま残る
-                        for br in td_copy.find_all('br'):
-                            br.replace_with('\n')
+                    #    for br in td_copy.find_all('br'):
+                    #        br.replace_with('\n')
 
                         # ★ separator 指定を外し、タグの境界での勝手な分割を防ぐ
-                        fallback_text = td_copy.get_text()
+                    #    fallback_text = td_copy.get_text()
                         
                         # 3. 改行ごとに分割してリストに追加
-                        for line_text in fallback_text.split('\n'):
+                    #    for line_text in fallback_text.split('\n'):
                             # 空白(全半角)、■◆●などの箇条書き記号、[1]などのテキスト注釈を一網打尽にする
-                            clean_line = re.sub(r'[\s\*■◆●○◇]|\[[^\]]*\]', '', line_text).strip()
+                    #        clean_line = re.sub(r'[\s\*■◆●○◇]|\[[^\]]*\]', '', line_text).strip()
                             # 抽出した路線名を登録
-                            if clean_line and clean_line not in data["lines"]:
-                                data["lines"].append(clean_line)
+                    #        if clean_line and clean_line not in data["lines"]:
+                    #            data["lines"].append(clean_line)
 
                 # ⑧ 乗換駅の名前とリンクの抽出
                 elif '乗換' in header:
@@ -1391,6 +1405,7 @@ def extract_and_count_stations():
         if s.get("endDay", 999999) == 999999 and not s.get("is_excluded"):
             missing = []
             if not s.get("companies"): missing.append("事業者")
+            if not s.get("lines"): missing.append("路線")
             if not s.get("yomi"): missing.append("よみ")
             if not s.get("latitude") or not s.get("longitude"): missing.append("座標")
             if not s.get("pref"): missing.append("都道府県")
