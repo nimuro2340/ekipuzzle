@@ -351,7 +351,7 @@ def get_todays_sub_pages():
     weekday = datetime.datetime.today().weekday()
 
     # ★動作テストのため、強制的に「6:日曜日」に設定します
-    weekday = 2
+    weekday = 0
 
     # 取得した全ページを曜日ごとに自動で7等分する
     chunks = [[] for _ in range(7)]
@@ -897,6 +897,10 @@ def fetch_station_details(url, station_name):
                                     "JR京都線": "東海道本線",
                                     # 必要に応じてここに追記していく
                                 }
+
+                                # エイリアス辞書に合致する名前があれば、正式名称にすり替える
+                                if official_name in line_aliases:
+                                    official_name = line_aliases[official_name]
 
                                 # 最終的にきれいになった路線名をリストに追加
                                 if official_name not in data["lines"]:
