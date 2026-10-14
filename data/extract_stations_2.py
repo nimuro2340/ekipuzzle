@@ -351,7 +351,7 @@ def get_todays_sub_pages():
     weekday = datetime.datetime.today().weekday()
 
     # ★動作テストのため、強制的に「6:日曜日」に設定します
-    weekday = 1
+    weekday = 0
 
     # 取得した全ページを曜日ごとに自動で7等分する
     chunks = [[] for _ in range(7)]
@@ -887,6 +887,17 @@ def fetch_station_details(url, station_name):
                                 official_name = get_official_wiki_title_api(href, raw_name, station_name)
                                 # 末尾の曖昧さ回避カッコ（例: " (鉄道)"）を全自動で削除
                                 official_name = re.sub(r'\s\(.*?\)$', '', official_name)
+
+                                # ==========================================
+                                # ★ 路線名の名寄せ（エイリアス）辞書
+                                # ==========================================
+                                line_aliases = {
+                                    "東海道線": "東海道本線",
+                                    "宇都宮線": "東北本線",
+                                    "JR京都線": "東海道本線",
+                                    # 必要に応じてここに追記していく
+                                }
+
                                 # 最終的にきれいになった路線名をリストに追加
                                 if official_name not in data["lines"]:
                                     data["lines"].append(official_name)
