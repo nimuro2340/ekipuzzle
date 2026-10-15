@@ -351,7 +351,7 @@ def get_todays_sub_pages():
     weekday = datetime.datetime.today().weekday()
 
     # ★動作テストのため、強制的に「6:日曜日」に設定します
-    weekday = 1
+    weekday = 0
 
     # 取得した全ページを曜日ごとに自動で7等分する
     chunks = [[] for _ in range(7)]
@@ -893,7 +893,7 @@ def fetch_station_details(url, station_name):
                                 # ==========================================
                                 line_aliases = {
                                     "東海道線": "東海道本線",
-                                    "宇都宮線": "東北本線",
+                                    #"宇都宮線": "東北本線",
                                     "JR京都線": "東海道本線",
                                     # 必要に応じてここに追記していく
                                 }
