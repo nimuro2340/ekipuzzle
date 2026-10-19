@@ -607054,5 +607054,68 @@
     "startDay": 0,
     "endDay": 999999,
     "missingCount": 0
+  },
+  {
+    "pref": "北海道",
+    "county": "",
+    "municipality": "函館市",
+    "ward": "",
+    "muni_url": "https://ja.wikipedia.org/wiki/函館市",
+    "is_designated_city": false,
+    "is_core_city": true,
+    "is_special_city": false,
+    "is_pref_capital": false,
+    "platforms": 2,
+    "tracks": 2,
+    "min_km": 0.8,
+    "open_year": 1913,
+    "open_month": 6,
+    "open_day": 29,
+    "max_passengers": 0,
+    "companies": [
+      "函館市企業局交通部"
+    ],
+    "lines": [],
+    "romaji": "ARENA-MAE[1]",
+    "address": "北海道函館市湯川町1丁目34-17先、32-3先",
+    "latitude": 41.7818944,
+    "longitude": 140.782333,
+    "adjacent_stations": [
+      {
+        "name": "湯の川温泉",
+        "link": "https://ja.wikipedia.org/wiki/湯の川温泉停留場"
+      },
+      {
+        "name": "駒場車庫前",
+        "link": "https://ja.wikipedia.org/wiki/駒場車庫前停留場"
+      }
+    ],
+    "transfer_stations": [],
+    "is_abolished_confirmed": false,
+    "region": [
+      "北海道地方"
+    ],
+    "prefecture": "北海道",
+    "muni_type": "市",
+    "name_kanji_len": 2,
+    "name_yomi_len": 4,
+    "city_code": "01202-5",
+    "corporate_number": "9000020012025",
+    "area": 677.82,
+    "population": 230337,
+    "population_density": 340,
+    "first_paragraph": "",
+    "postal_code": "040-8666",
+    "kanji": "アリーナ前（函館サーモン・まるなまアリーナ前）停留場",
+    "yomi": "アリーナまえはこだてサーモンまるなまアリーナまえ",
+    "url": "https://ja.wikipedia.org/wiki/アリーナ前（函館サーモン・まるなまアリーナ前）停留場",
+    "subPage": "あ",
+    "is_excluded": false,
+    "exclusion_reason": "",
+    "unique_key": "https://ja.wikipedia.org/wiki/アリーナ前（函館サーモン・まるなまアリーナ前）停留場_アリーナ前（函館サーモン・まるなまアリーナ前）停留場",
+    "id": 9151,
+    "startDay": 0,
+    "endDay": 999999,
+    "missingCount": 0
   }
 ]
