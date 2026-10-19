@@ -217553,7 +217553,7 @@
     "open_year": 1895,
     "open_month": 5,
     "open_day": 5,
-    "max_passengers": 1119,
+    "max_passengers": 1082,
     "companies": [
       "九州旅客鉄道"
     ],
@@ -386322,7 +386322,7 @@
       "東北本線"
     ],
     "romaji": "Toyohara",
-    "address": "栃木県那須郡那須町大字豊原甲2204",
+    "address": "栃木県那須郡那須町大字豊原甲",
     "latitude": 37.0550944,
     "longitude": 140.1552028,
     "adjacent_stations": [
