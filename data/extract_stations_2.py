@@ -216,7 +216,7 @@ def extract_municipality_data(html_text):
         "area": None,               # 面積（数字のみ）
         "population": None,         # 総人口（数字のみ）
         "population_density": None, # 人口密度（数字のみ）
-        "first_paragraph": "",      # 冒頭の1段落
+        "first_paragraph": "",      # 市区町村の冒頭の1段落
         "postal_code": ""           # 所在地の郵便番号
     }
 
@@ -351,7 +351,7 @@ def get_todays_sub_pages():
     weekday = datetime.datetime.today().weekday()
 
     # ★動作テストのため、強制的に「6:日曜日」に設定します
-    # weekday = 6
+    # weekday = 0
 
     # 取得した全ページを曜日ごとに自動で7等分する
     chunks = [[] for _ in range(7)]
@@ -363,7 +363,7 @@ def get_todays_sub_pages():
         chunks[weekday] = ["あ"]
 
     # ★テスト用に「あ」のページだけを強制的に指定します
-    # return ["む-も", "や-わ行"], weekday
+    # return ["あ", ], weekday
 
     # ★手動更新用に全ページ（sub_pages_all）を強制的に返すようにします
     # 本来の挙動に戻すときは、これをコメントアウトして下のreturn chunks[weekday], weekdayを有効化
@@ -403,12 +403,36 @@ def fetch_station_details(url, station_name):
         "longitude": None,         # 経度
         "adjacent_stations": [],   # 隣駅リスト（辞書形式: name, link）
         "transfer_stations": [],    # 乗換駅リスト（辞書形式: name, link）
-        "is_abolished_confirmed": False # ★追加：確実に廃止された証拠を掴んだかどうかのフラグ
+        "is_abolished_confirmed": False, # 確実に廃止された証拠を掴んだかどうかのフラグ
+        "overview": "",            # 概要の冒頭1段落
     }
 
     try:
         res = requests.get(url, headers={"User-Agent": "EkiDleBot/1.0"}, timeout=10)
         soup = BeautifulSoup(res.text, "html.parser")
+
+        # 「概要」セクションの第一段落のみをピンポイントで抽出する
+        h2_overview = soup.find('h2', id='概要') or next(
+            (h2 for h2 in soup.find_all('h2') if h2.get_text(strip=True) == '概要'), None
+        )
+        if h2_overview:
+            # h2が <div class="mw-heading"> で囲まれている場合はそのdivを起点にする
+            start_node = h2_overview.find_parent('div', class_='mw-heading') or h2_overview
+            for sib in start_node.find_next_siblings():
+                # 次のセクション見出し（h2等）に到達したら探索を打ち切る
+                if sib.name in ['h2', 'section'] or (sib.name == 'div' and 'mw-heading' in (sib.get('class') or [])):
+                    break
+                if sib.name == 'p':
+                    if 'mw-empty-elt' in (sib.get('class') or []):
+                        continue
+                    p_copy = copy.copy(sib)
+                    # 注釈（[1]など）やスタイルタグを除去してからテキスト化する
+                    for tag in p_copy.find_all(['sup', 'style']):
+                        tag.decompose()
+                    text = p_copy.get_text(strip=True)
+                    if text:
+                        data["overview"] = text
+                        break
 
         infoboxes = soup.find_all('table', class_='infobox')
 
@@ -1103,27 +1127,27 @@ def extract_and_count_stations():
 
         # ★★ 1. ここに「手動補正パッチ」を追加する ★★
         MANUAL_PATCH = {
-            "葉多駅": {"companies": ["神戸電鉄"]},
+            # 日本橋駅はどちらも座標が無いので手動登録
             "日本橋駅 (大阪府)": {"latitude": 34.667228, "longitude": 135.506285},
             "近鉄日本橋駅": {"latitude": 34.667228, "longitude": 135.506285},
-            "富良野駅": {"latitude": 43.346991, "longitude": 142.391724},
-            "秋田港駅": {"is_excluded": True},
-            "日本の鉄道路線一覧": {"is_excluded": True},
-            "一ノ堰六地蔵尊駅": {"is_excluded": True},
-            "清滝駅":{"is_excluded": True},
-            "ケーブル比叡駅": {"is_excluded": True},
-            "青函トンネル記念館駅": {"is_excluded": True},
-            "体験坑道駅": {"is_excluded": True},
-            "高尾山駅": {"is_excluded": True},
-            "滝本駅": {"is_excluded": True},
-            "千葉貨物駅": {"is_excluded": True},
-            "東港駅": {"is_excluded": True},
-            "御岳山駅": {"is_excluded": True},
             # 万が一、旅客駅なのに自動判定で誤って除外されてしまった場合の救済例
             # "○○駅": {"is_excluded": False},
             # 逆に、自動判定をすり抜けた貨物専用駅を手動で除外する例
             # "××駅": {"is_excluded": True}
         }
+
+        # 外部ファイル (manual_patch.json) からの読み込みとマージ（ハードコードと重複している場合はjson優先）
+        if os.path.exists("stations_manual_patch.json"):
+            try:
+                with open("stations_manual_patch.json", "r", encoding="utf-8") as f:
+                    ext_patch = json.load(f)
+                    for k, v in ext_patch.items():
+                        if k in MANUAL_PATCH:
+                            MANUAL_PATCH[k].update(v)
+                        else:
+                            MANUAL_PATCH[k] = v
+            except Exception as e:
+                print(f"  [警告] stations_manual_patch.json の読み込みに失敗しました: {e}")
 
         # 1. 既存の JSON データを読み込む
         if os.path.exists("stations.json"):
@@ -1158,7 +1182,7 @@ def extract_and_count_stations():
         # 2. 今回取得したページデータを統合
         for v in page_stations:
 
-            # ▼▼ ここから追加：自動除外判定とパッチ適用 ▼▼
+            # 自動除外判定とパッチ適用
             if not v.get("is_sniper_skipped"):  # スキップされた駅は除外判定やパッチ処理をスルーする 
                 v["is_excluded"] = False
                 v["exclusion_reason"] = "" 
@@ -1201,8 +1225,6 @@ def extract_and_count_stations():
                     # 除外フラグを操作した時だけ理由を上書きする
                     if "is_excluded" in MANUAL_PATCH[k_name]:
                         v["exclusion_reason"] = "手動パッチによる指定"
-                # ▲▲ ここまで追加 ▲▲
-
 
             unique_key = f"{v['url']}_{v['kanji']}"
             v["unique_key"] = unique_key
