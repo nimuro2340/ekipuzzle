@@ -443841,14 +443841,14 @@
     "kanji": "函館アリーナ前停留場",
     "yomi": "はこだてアリーナまえ",
     "url": "https://ja.wikipedia.org/wiki/函館アリーナ前停留場",
-    "subPage": "引っ越し調査中",
+    "subPage": "廃止済",
     "is_excluded": false,
     "exclusion_reason": "",
     "unique_key": "https://ja.wikipedia.org/wiki/函館アリーナ前停留場_函館アリーナ前停留場",
     "id": 6654,
     "startDay": 0,
-    "endDay": 999999,
-    "missingCount": 13
+    "endDay": 1026,
+    "missingCount": 14
   },
   {
     "pref": "北海道",
