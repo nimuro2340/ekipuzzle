@@ -190087,7 +190087,7 @@
     "open_year": 1930,
     "open_month": 12,
     "open_day": 9,
-    "max_passengers": 1887,
+    "max_passengers": 2525,
     "companies": [
       "近畿日本鉄道"
     ],
@@ -190215,7 +190215,7 @@
     "open_year": 1930,
     "open_month": 12,
     "open_day": 9,
-    "max_passengers": 1473,
+    "max_passengers": 2412,
     "companies": [
       "近畿日本鉄道"
     ],
@@ -475672,7 +475672,7 @@
     "prefecture": "岩手県",
     "muni_type": "市",
     "name_kanji_len": 3,
-    "name_yomi_len": 5,
+    "name_yomi_len": 0,
     "city_code": "03203-4",
     "corporate_number": "6000020032034",
     "area": 322.16,
