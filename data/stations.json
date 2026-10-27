@@ -48335,7 +48335,7 @@
     "city_code": "03209-3",
     "corporate_number": "4000020032093",
     "area": 1256.42,
-    "population": 99436,
+    "population": 99683,
     "population_density": 79,
     "first_paragraph": "",
     "postal_code": "021-8501",
@@ -64481,7 +64481,7 @@
     "city_code": "03209-3",
     "corporate_number": "4000020032093",
     "area": 1256.42,
-    "population": 99436,
+    "population": 99683,
     "population_density": 79,
     "first_paragraph": "",
     "postal_code": "021-8501",
@@ -238572,7 +238572,7 @@
       "京浜東北線"
     ],
     "romaji": "Saitama-Shintoshin",
-    "address": "さいたま市大宮区吉敷町四丁目261-1",
+    "address": "さいたま市大宮区吉敷町4丁目",
     "latitude": 35.893925,
     "longitude": 139.6335583,
     "adjacent_stations": [
