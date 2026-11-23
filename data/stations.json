@@ -4432,7 +4432,7 @@
     "open_year": 1928,
     "open_month": 11,
     "open_day": 1,
-    "max_passengers": 50866,
+    "max_passengers": 51892,
     "companies": [
       "京成電鉄"
     ],
@@ -4450,7 +4450,7 @@
         "link": "https://ja.wikipedia.org/wiki/お花茶屋駅"
       },
       {
-        "name": "高砂",
+        "name": "京成高砂",
         "link": "https://ja.wikipedia.org/wiki/京成高砂駅"
       },
       {
@@ -530265,7 +530265,7 @@
     "open_year": 1896,
     "open_month": 12,
     "open_day": 25,
-    "max_passengers": 95714,
+    "max_passengers": 94737,
     "companies": [
       "東日本旅客鉄道",
       "京成電鉄"
